@@ -22,5 +22,8 @@ run3: MinimumTime.class
 run4: EarliestEndTime.class
 	$(JAVA) EarliestEndTime
 
+runBonus: BonusEarliestEndTime.class
+	$(JAVA) BonusEarliestEndTime
+
 clean:
 	rm -f *.class

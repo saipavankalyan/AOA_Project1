@@ -15,7 +15,6 @@ public class EarliestEndTime {
         m = sc.nextInt();
 
         House[] houses = new House[m];
-        PriorityQueue<House> housesEarliestEndTime = new PriorityQueue<>(m, (h1, h2) -> h1.endDay - h2.endDay);
 
         for (int i = 0; i < m; i++) {
             int s = sc.nextInt();
@@ -23,6 +22,8 @@ public class EarliestEndTime {
             houses[i] = new House(s, e, index);
             index++;
         }
+
+        PriorityQueue<House> housesEarliestEndTime = new PriorityQueue<>(m, (h1, h2) -> h1.endDay - h2.endDay);
 
         ArrayList<Integer> indicesEarliestEndTime = new ArrayList<>();
 
