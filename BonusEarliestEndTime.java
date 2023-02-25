@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.Scanner;
 
@@ -23,9 +24,10 @@ public class BonusEarliestEndTime {
             index++;
         }
 
-        PriorityQueue<House> housesEarliestEndTime = new PriorityQueue<>(m, (h1, h2) -> h1.endDay - h2.endDay);
+        PriorityQueue<House> housesEarliestEndTime = new PriorityQueue<>(m, Comparator.<House>comparingInt(h -> h.endDay)
+                                                                                      .thenComparingInt(h -> h.startDay));
 
-        ArrayList<Integer> indicesEarliestEndTime = new ArrayList<>();
+        ArrayList<Integer> paintedHouses = new ArrayList<>();
 
         int currentDay = 1;
 
@@ -87,7 +89,7 @@ public class BonusEarliestEndTime {
              * Paint the first valid house (End data greater than or equal to endDate).
              */
             if(house != null) {
-                indicesEarliestEndTime.add(house.index);
+                paintedHouses.add(house.index);
             }
 
             /**
@@ -96,7 +98,8 @@ public class BonusEarliestEndTime {
             currentDay += 1;
         }
 
-        System.out.println(indicesEarliestEndTime);
+        System.out.println(paintedHouses);
+        System.out.println(paintedHouses.size());
 
         sc.close();
     }

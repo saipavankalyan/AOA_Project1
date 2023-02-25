@@ -33,7 +33,8 @@ public class EarliestEndTime {
         /**
          * Priority Queue based on the earliest end time.
          */
-        PriorityQueue<House> priorityQHouses = new PriorityQueue<>(m, Comparator.comparingInt(h -> h.endDay));
+        PriorityQueue<House> priorityQHouses = new PriorityQueue<>(m, Comparator.<House>comparingInt(h -> h.endDay)
+                                                                                .thenComparingInt(h -> h.startDay));
 
         /**
          * List for storing painted house indices
@@ -84,6 +85,7 @@ public class EarliestEndTime {
         }
 
         System.out.println(paintedHouses);
+        System.out.println(paintedHouses.size());
 
         sc.close();
     }

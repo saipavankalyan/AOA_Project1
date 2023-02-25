@@ -33,10 +33,10 @@ public class MinimumTime {
         /**
          * Priority Queue based on the duration of the time a house can be painted. (endDay - startDay).
          */
-        PriorityQueue<House> priorityQHouses = new PriorityQueue<>(m,
-                Comparator.comparingInt(h -> (h.endDay - h.startDay)));
+        PriorityQueue<House> priorityQHouses = new PriorityQueue<>(m, Comparator.<House>comparingInt(h -> (h.endDay - h.startDay))
+                                                                                .thenComparingInt(h -> h.endDay));
 
-        ArrayList<Integer> indicesMinimumTime = new ArrayList<>();
+        ArrayList<Integer> paintedHouses = new ArrayList<>();
 
         /**
          * For each possible day (1..n).
@@ -74,7 +74,7 @@ public class MinimumTime {
                  * Paint the house only if the it's is valid for the current day.
                  */
                 if (h.startDay <= currentDay && h.endDay >= currentDay) {
-                    indicesMinimumTime.add(h.index);
+                    paintedHouses.add(h.index);
                     painted = true;
                 }
 
@@ -86,7 +86,8 @@ public class MinimumTime {
             currentDay++;
         }
 
-        System.out.println(indicesMinimumTime);
+        System.out.println(paintedHouses);
+        System.out.println(paintedHouses.size());
 
         sc.close();
     }

@@ -1,3 +1,4 @@
+import java.util.Comparator;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
@@ -33,7 +34,9 @@ public class LatestStartTime {
         /**
          * Priority Queue for storing houses, based on the latest start time.
          */
-        PriorityQueue<House> housesLatestStartTime = new PriorityQueue<>(m, (h1, h2) -> h2.startDay - h1.startDay);
+        PriorityQueue<House> priorityQHouses = new PriorityQueue<>(m, Comparator.<House>comparingInt(h -> h.startDay)
+                                                                                .reversed()
+                                                                                .thenComparingInt(h -> h.endDay));
 
         /**
          * Storing the order of painted houses
@@ -49,7 +52,7 @@ public class LatestStartTime {
              * For each unseen house, that can be painted on this day (startDay <= currentDay), add the house to the priority queue.
              */
             while (currentHouseIndex < m && houses[currentHouseIndex].startDay <= currentDay) {
-                housesLatestStartTime.add(houses[currentHouseIndex]);
+                priorityQHouses.add(houses[currentHouseIndex]);
 
                 /**
                  * Since, the houses are seen (in priority queue), move to the next house.
@@ -66,12 +69,12 @@ public class LatestStartTime {
             /**
              * If there are houses that could painted on this dau and no house is painted on this dau.
              */
-            while (!painted && housesLatestStartTime.size() > 0) {
+            while (!painted && priorityQHouses.size() > 0) {
 
                 /**
                  * Choose the house that starts the latest.
                  */
-                House h = housesLatestStartTime.poll();
+                House h = priorityQHouses.poll();
 
                 /**
                  * Paint the house only if the it's is valid for the current day.
@@ -90,6 +93,7 @@ public class LatestStartTime {
         }
 
         System.out.println(paintedHouses);
+        System.out.println(paintedHouses.size());
 
         sc.close();
     }

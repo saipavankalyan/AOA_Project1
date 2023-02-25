@@ -54,20 +54,21 @@ public class EarliestStartTime {
                 currentHouseIndex += 1;
 
                 /**
+                 * Move to the next day
+                 */
+                currentDay += 1;
+
+                /**
                  * Current house is not yet ready to be painting. (OPTIMIZATION - OPTIONAL) - Move to the day,
                  * when the current house can be painted as there will be no house to be painted in the middle days.
                  */
             } else {
                 currentDay = h.startDay;
             }
-
-            /**
-             * Move to the next day, (in all cases)
-             */
-            currentDay += 1;
         }
 
         System.out.println(paintedHouses);
+        System.out.println(paintedHouses.size());
 
         sc.close();
     }
