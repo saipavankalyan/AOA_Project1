@@ -10,11 +10,17 @@ public class EarliestStartTime {
         int currentDay = 1;
         int currentHouseIndex = 0;
 
+        /**
+         * Read n (number of days) and m (number of houses)
+         */
         n = sc.nextInt();
         m = sc.nextInt();
 
         House[] houses = new House[m];
 
+        /**
+         * Read the houses
+         */
         for (int i = 0; i < m; i++) {
             int s = sc.nextInt();
             int e = sc.nextInt();
@@ -22,19 +28,46 @@ public class EarliestStartTime {
             index++;
         }
 
-        ArrayList<Integer> indicesEarliestStartTime = new ArrayList<>();
+        ArrayList<Integer> paintedHouses = new ArrayList<>();
 
-        while (currentDay <= n) {
+        /**
+         * Iterate for each day until all houses are seen
+         */
+        while (currentDay <= n && currentHouseIndex < m) {
+
+            /**
+             * Choose the house, that is available the earliest.
+             */
             House h = houses[currentHouseIndex];
-            if (h.startDay > currentDay)
+
+            /**
+             * If the current house cannot be painted, skip the house without painting
+             */
+            if (h.endDay < currentDay) {
+                currentHouseIndex += 1;
+
+                /**
+                 * Current house is ready for painting on the current day, paint the house and move to the next house
+                 */
+            } else if (h.startDay <= currentDay) {
+                paintedHouses.add(h.index);
+                currentHouseIndex += 1;
+
+                /**
+                 * Current house is not yet ready to be painting. (OPTIMIZATION - OPTIONAL) - Move to the day,
+                 * when the current house can be painted as there will be no house to be painted in the middle days.
+                 */
+            } else {
                 currentDay = h.startDay;
-            if (h.startDay <= currentDay && h.endDay >= currentDay)
-                indicesEarliestStartTime.add(h.index);
-            currentDay++;
-            currentHouseIndex++;
+            }
+
+            /**
+             * Move to the next day, (in all cases)
+             */
+            currentDay += 1;
         }
 
-        System.out.println(indicesEarliestStartTime);
+        System.out.println(paintedHouses);
 
         sc.close();
     }

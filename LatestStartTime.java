@@ -11,12 +11,17 @@ public class LatestStartTime {
         int currentDay = 1;
         int currentHouseIndex = 0;
 
+        /**
+         * Read n (number of days) and m (number of houses)
+         */
         n = sc.nextInt();
         m = sc.nextInt();
 
         House[] houses = new House[m];
-        PriorityQueue<House> housesLatestStartTime = new PriorityQueue<>(m, (h1, h2) -> h2.startDay - h1.startDay);
 
+        /**
+         * Read houses
+         */
         for (int i = 0; i < m; i++) {
             int s = sc.nextInt();
             int e = sc.nextInt();
@@ -24,25 +29,67 @@ public class LatestStartTime {
             index++;
         }
 
-        ArrayList<Integer> indicesLatestStartTime = new ArrayList<>();
 
+        /**
+         * Priority Queue for storing houses, based on the latest start time.
+         */
+        PriorityQueue<House> housesLatestStartTime = new PriorityQueue<>(m, (h1, h2) -> h2.startDay - h1.startDay);
+
+        /**
+         * Storing the order of painted houses
+         */
+        ArrayList<Integer> paintedHouses = new ArrayList<>();
+
+        /**
+         * For each day
+         */
         while (currentDay <= n) {
+
+            /**
+             * For each unseen house, that can be painted on this day (startDay <= currentDay), add the house to the priority queue.
+             */
             while (currentHouseIndex < m && houses[currentHouseIndex].startDay <= currentDay) {
                 housesLatestStartTime.add(houses[currentHouseIndex]);
+
+                /**
+                 * Since, the houses are seen (in priority queue), move to the next house.
+                 */
                 currentHouseIndex++;
             }
 
-            if (housesLatestStartTime.size() > 0) {
+
+            /**
+             * To track if a house is painted on this day.
+             */
+            boolean painted = false;
+
+            /**
+             * If there are houses that could painted on this dau and no house is painted on this dau.
+             */
+            while (!painted && housesLatestStartTime.size() > 0) {
+
+                /**
+                 * Choose the house that starts the latest.
+                 */
                 House h = housesLatestStartTime.poll();
-                if (h.startDay <= currentDay && h.endDay >= currentDay)
-                    indicesLatestStartTime.add(h.index);
-                else
-                    continue;
+
+                /**
+                 * Paint the house only if the it's is valid for the current day.
+                 */
+                if (h.startDay <= currentDay && h.endDay >= currentDay) {
+                    paintedHouses.add(h.index);
+                    painted = true;
+                }
+
             }
+
+            /**
+             * Move to next day.
+             */
             currentDay++;
         }
 
-        System.out.println(indicesLatestStartTime);
+        System.out.println(paintedHouses);
 
         sc.close();
     }
