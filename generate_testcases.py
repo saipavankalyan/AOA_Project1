@@ -5,7 +5,7 @@ def generate_testcases(n, m):
     print(n, m)
     times = []
     for i in range(1, m+1):
-        start = random.randrange(0, n+1)
+        start = random.randrange(0, n)
         end = random.randrange(start + 1, n+1)
         times.append((start, end))
     times = sorted(times)
