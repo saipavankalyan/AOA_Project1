@@ -12,9 +12,15 @@ public class BonusEarliestEndTime {
         int index = 1;
         int currentHouseIndex = 0;
 
+        /**
+         * Read n (Number of days 1..n) and m (Number of House).
+         */
         n = sc.nextInt();
         m = sc.nextInt();
 
+        /**
+         * Read houses.
+         */
         House[] houses = new House[m];
 
         for (int i = 0; i < m; i++) {
@@ -24,7 +30,10 @@ public class BonusEarliestEndTime {
             index++;
         }
 
-        PriorityQueue<House> housesEarliestEndTime = new PriorityQueue<>(m, Comparator.<House>comparingInt(h -> h.endDay)
+        /**
+         * Priority Queue based on the End Day of the availability of House.
+         */
+        PriorityQueue<House> priorityQHouses = new PriorityQueue<>(m, Comparator.<House>comparingInt(h -> h.endDay)
                                                                                       .thenComparingInt(h -> h.startDay));
 
         ArrayList<Integer> paintedHouses = new ArrayList<>();
@@ -32,18 +41,21 @@ public class BonusEarliestEndTime {
         int currentDay = 1;
 
         /**
-         * While the current day is valid (less than n)
+         * While the current day is valid (less than n).
          * Though it appears to run for n times, You try to paint at least a single house on a single day.
          * You are not painting any house, only if it's not possible.
-         * But, next you move to the next valid day (start day of next house).
+         * But, next you move to the next valid day (start day of next house) where you are sure you can paint at least one house.
          * (not incremented one by one).
+         * So, the worst case, you will be iterating for 2m days. (m days, where you will be successfully painting a house,
+         * m days where you won't be painting any house)
+         * So, the time complexity is O(m log m).
          */
         while (currentDay <= n) {
 
             /**
              * Change current day, if there are no houses to paint
              */
-            if(housesEarliestEndTime.isEmpty()) {
+            if(priorityQHouses.isEmpty()) {
 
                 /**
                  * If all houses have been processed, break
@@ -63,33 +75,33 @@ public class BonusEarliestEndTime {
              * Runs At max for m iterations. (m log m).
              */
             while (currentHouseIndex < m && houses[currentHouseIndex].startDay == currentDay) {
-                housesEarliestEndTime.add(houses[currentHouseIndex]);
+                priorityQHouses.add(houses[currentHouseIndex]);
                 currentHouseIndex++;
             }
 
 
             /**
-             * Find the house to paint on the day
+             * To track if a house is painted on this day.
              */
-            House house = housesEarliestEndTime.poll();
+            boolean painted = false;
 
             /**
-             * Delete all houses that cannot be painted on that day. (End date is less). At max, all m houses are not valid
-             * Runs at max for m log m.
+             * If there are houses that could painted on this dau and no house is painted on this day.
              */
-            while (house.endDay < currentDay) {
-                if(housesEarliestEndTime.isEmpty()) {
-                    house = null;
-                    break;
+            while (!painted && priorityQHouses.size() > 0) {
+
+                /**
+                 * Choose the house that starts the latest.
+                 */
+                House h = priorityQHouses.poll();
+
+                /**
+                 * Paint the house only if the it's is valid for the current day.
+                 */
+                if (h.startDay <= currentDay && h.endDay >= currentDay) {
+                    paintedHouses.add(h.index);
+                    painted = true;
                 }
-                house = housesEarliestEndTime.poll();
-            }
-
-            /**
-             * Paint the first valid house (End data greater than or equal to endDate).
-             */
-            if(house != null) {
-                paintedHouses.add(house.index);
             }
 
             /**
